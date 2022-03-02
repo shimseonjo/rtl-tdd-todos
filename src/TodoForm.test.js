@@ -21,4 +21,26 @@ describe("<TodoForm />", () => {
     });
     expect(input).toHaveAttribute("value", "TDD 배우기");
   });
+
+  //버튼을 클릭했을때 발생하는 submit 이벤트를 관리
+  //TodoForm컴포넌트는 onInsert라는 함수를 props로 받아올것이고,
+  //submit 이벤트가 발생하게 되면 이 함수가 호출됩니다.
+  //그리고 input값은 비워져야 합니다.
+
+  it("calls onInsert and clears input", () => {
+    const onInsert = jest.fn();
+    render(<TodoForm onInsert={onInsert} />);
+    const input = screen.getByPlaceholderText("할 일을 입력하세요");
+    const button = screen.getByText("등록");
+    //수정하고
+    fireEvent.change(input, {
+      target: {
+        value: "TDD 배우기",
+      }
+    });
+    //버튼 클릭
+    fireEvent.click(button);
+    expect(onInsert).toBeCalledWith("TDD 배우기"); //onInsert가 'TDD 배우기'파라미터가
+    expect(input).toHaveAttribute("value", ""); //input이 비워져야 함
+  });
 });
