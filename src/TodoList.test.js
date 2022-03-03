@@ -1,6 +1,6 @@
 import React from "react";
 import TodoList from "./TodoList";
-import { render ,screen} from "@testing-library/react";
+import { fireEvent, render ,screen} from "@testing-library/react";
 
 describe('<TodoList />',()=>{
     const sampleTodos = [{
@@ -16,5 +16,21 @@ describe('<TodoList />',()=>{
         render(<TodoList todos={sampleTodos}/>);
         screen.getByText(sampleTodos[0].text);
         screen.getByText(sampleTodos[0].text);
+    });
+    it('calls onToggle and onRemove',()=>{
+        const onToggle = jest.fn();
+        const onRemove = jest.fn();
+        
+        render(<TodoList todos={sampleTodos} onToggle={onToggle} onRemove={onRemove} />);
+        
+        fireEvent.click(screen.getByText(sampleTodos[0].text));
+        expect(onToggle).toBeCalledWith(sampleTodos[0].id);
+
+        fireEvent.click(screen.getAllByText('삭제')[0]);
+        expect(onRemove).toBeCalledWith(sampleTodos[0].id);
+    
+
+
+        
     });
 });
