@@ -16,10 +16,26 @@ const TodoApp = () => {
     },
   ]);
   const nextId = useRef(3); //새로 추가할 항목에서 사용할 id
+//   const onInsert = useCallback(
+//     (text) => {
+//       //새 항목 추가 후
+//       setTodos(
+//         todos.concat({
+//           id: nextId.current,
+//           text,
+//           done: false,
+//         })
+//       );
+//       //nextId값에 1더하기
+//       nextId.current += 1;
+//     },
+//     [todos]
+//   );
+//리랜더링 성능최적화 작업
   const onInsert = useCallback(
     (text) => {
       //새 항목 추가 후
-      setTodos(
+      setTodos(todos =>
         todos.concat({
           id: nextId.current,
           text,
@@ -29,23 +45,38 @@ const TodoApp = () => {
       //nextId값에 1더하기
       nextId.current += 1;
     },
-    [todos]
+    []
   );
-  const onToggle = useCallback(
+//   const onToggle = useCallback(
+//     (id) => {
+//       setTodos(
+//         todos.map((todo) =>
+//           todo.id === id ? { ...todo, done: !todo.done } : todo
+//         )
+//       );
+//     },
+//     [todos]
+//   );
+const onToggle = useCallback(
     (id) => {
-      setTodos(
-        todos.map((todo) =>
+      setTodos(todos =>
+        todos.map(todo =>
           todo.id === id ? { ...todo, done: !todo.done } : todo
         )
       );
     },
-    [todos]
+    []
   );
-  const onRemove = useCallback(
-      id => {
-          setTodos(todos.filter(todo=>todo.id !== id));
-      },[todos]
-  );
+//   const onRemove = useCallback(
+//       id => {
+//           setTodos(todos.filter(todo=>todo.id !== id));
+//       },[todos]
+//   );
+const onRemove = useCallback(
+    id => {
+        setTodos(todos => todos.filter(todo=>todo.id !== id));
+    },[]
+);
   return (
     <>
       <TodoForm onInsert={onInsert} />
